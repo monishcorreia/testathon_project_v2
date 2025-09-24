@@ -1,0 +1,20 @@
+{
+  "name": "browserstack-testathon-automate-playwright",
+  "version": "0.2.0",
+  "description": "Playwright tests for BrowserStack Testathon (Offers + Logout + Navigation).",
+  "main": "index.js",
+  "scripts": {
+    "install-deps": "npm install",
+    "test:local": "npx playwright test",
+    "test:browserstack": "node scripts/run-on-browserstack.js",
+    "postinstall": "npm update browserstack-node-sdk",
+    "test:browserstack-browserstack": "browserstack-node-sdk node scripts/run-on-browserstack.js",
+    "test:local-browserstack": "npx browserstack-node-sdk playwright test"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "@playwright/test": "^1.55.0",
+    "browserstack-node-sdk": "^1.42.8"
+  }
+}
