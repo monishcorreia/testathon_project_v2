@@ -1,5 +1,5 @@
 
-# BrowserStack Testathon — Playwright + Automate (Offers Page Tests)
+# BrowserStack Testathon — Playwright + Automate
 
 This repository contains Playwright end-to-end tests for the Testathon demo site: https://testathon.live/
 
