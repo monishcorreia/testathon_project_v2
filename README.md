@@ -5,8 +5,10 @@ This repository contains Playwright end-to-end tests for the Testathon demo site
 
 ## Tests Included
 - Verify Offers Page content (iPhone, OnePlus, Free Shipping)
-- Verify Username display
+- Verify Login functionality
 - Verify Logout functionality
+- Verify Add to Cart functionality
+- Verify Checkout functionality
 - BrowserStack Test Case ID tagging included via console markers.
 
 ## Setup
