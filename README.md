@@ -4,7 +4,7 @@
 This repository contains Playwright end-to-end tests for the Testathon demo site: https://testathon.live/
 
 ## Tests Included
-- Verify Offers Page content (iPhone, OnePlus, Free Shipping)
+- Verify Offers Page content
 - Verify Login functionality
 - Verify Logout functionality
 - Verify Add to Cart functionality
