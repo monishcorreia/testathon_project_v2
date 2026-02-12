@@ -26,21 +26,19 @@ jobs:
         run: npx playwright install chromium
       
       - name: Run Plastemart price extraction test
-        run: npx playwright test tests/plastemart-excel-download.spec.ts
+        id: test
+        run: npx playwright test tests/plastemart-excel-download.spec.ts 2>&1 | tee test-output.log
       
       - name: Upload test results
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: plastemart-results
-          path: test-results/
+          path: |
+            test-results/
+            downloads/
+            test-output.log
       
-      - name: Generate test report
+      - name: Parse and display results
         if: always()
-        run: |
-          echo "## Plastemart Price Extraction Results" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "Test completed on $(date)" >> $GITHUB_STEP_SUMMARY
-          echo "" >> $GITHUB_STEP_SUMMARY
-          echo "### Downloads:" >> $GITHUB_STEP_SUMMARY
-          ls -lh downloads/ >> $GITHUB_STEP_SUMMARY || echo "No downloads found"
+        run: node scripts/parse-plastemart-results.js test-output.log
