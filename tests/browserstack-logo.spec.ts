@@ -4,11 +4,17 @@ test.describe('BrowserStack DEMO Logo Tests', () => {
   test('should verify logo visibility and functionality TC001', async ({ page }) => {
     console.log(`[[PROPERTY|id=TC001]]`); // Add log test case ID
     // Navigate to the website and wait for network idle
-    await page.goto('https://testathon.live/', { waitUntil: 'networkidle' });
+    await page.goto('https://testathon.live/', { 
+        waitUntil: 'networkidle',
+        timeout: 30000 
+    });
     
     // Wait for page to be fully loaded
     await page.waitForLoadState('domcontentloaded');
     await page.waitForLoadState('load');
+    
+    // Wait for navigation bar to be visible since it contains the logo
+    await page.waitForSelector('nav', { state: 'visible', timeout: 30000 });
     
     // Define logo selector based on what we found in previous test
     const logoLocator = page.locator('a[href="/"] svg').first();

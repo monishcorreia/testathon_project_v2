@@ -1,0 +1,103 @@
+name: Daily Plastemart Price Extraction with Report
+
+on:
+  schedule:
+    # Run every day at 9:00 AM UTC (can adjust time)
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  extract-prices:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+      
+      - name: Run Plastemart price extraction test
+        run: |
+          npx playwright test tests/plastemart-excel-download.spec.ts 2>&1 | tee test-output.log
+      
+      - name: Extract test results to file
+        if: always()
+        run: |
+          mkdir -p test-reports
+          echo "# Plastemart Daily Price Report" > test-reports/daily-report.md
+          echo "" >> test-reports/daily-report.md
+          echo "**Date:** $(date)" >> test-reports/daily-report.md
+          echo "" >> test-reports/daily-report.md
+          echo "## Price Data" >> test-reports/daily-report.md
+          echo "" >> test-reports/daily-report.md
+          cat test-output.log | grep -A 50 "=== JSON OUTPUT ===" >> test-reports/daily-report.md || echo "Prices extracted successfully"
+      
+      - name: Commit results
+        if: always()
+        run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
+          cp test-reports/daily-report.md reports/plastemart-latest.md || mkdir -p reports && cp test-reports/daily-report.md reports/plastemart-latest.md
+          git add reports/plastemart-latest.md || true
+          git commit -m "Daily Plastemart prices - $(date +'%Y-%m-%d')" || true
+          git push || true
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plastemart-results-${{ github.run_id }}
+          path: |
+            test-reports/
+            test-results/
+            downloads/
+      
+      - name: Create GitHub Issue with Results
+        if: always()
+        uses: actions/github-script@v7
+        with:
+          script: |
+            const fs = require('fs');
+            const testOutput = fs.existsSync('test-output.log') ? fs.readFileSync('test-output.log', 'utf8') : 'No output available';
+            
+            const jsonMatch = testOutput.match(/=== JSON OUTPUT ===([\s\S]*?)(?:=== SUMMARY ===|$)/);
+            const jsonContent = jsonMatch ? jsonMatch[1].trim() : 'JSON data not found';
+            
+            const body = `## Daily Plastemart Price Extraction Report
+            
+            **Date:** ${new Date().toISOString().split('T')[0]}
+            **Time:** ${new Date().toLocaleTimeString()}
+            
+            ### JSON Output
+            \`\`\`json
+            ${jsonContent}
+            \`\`\`
+            
+            ### Test Output
+            \`\`\`
+            ${testOutput.substring(0, 2000)}
+            \`\`\`
+            
+            [View full artifacts](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})`;
+            
+            try {
+              const issue = await github.rest.issues.create({
+                owner: context.repo.owner,
+                repo: context.repo.repo,
+                title: `Plastemart Price Report - ${new Date().toISOString().split('T')[0]}`,
+                body: body,
+                labels: ['plastemart', 'automated-report']
+              });
+              console.log(`Created issue #${issue.data.number}`);
+            } catch (error) {
+              console.log('Could not create issue:', error);
+            }

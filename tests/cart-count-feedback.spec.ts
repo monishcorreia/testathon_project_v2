@@ -9,6 +9,12 @@ test.describe('BrowserStack DEMO Shopping Cart Feedback', () => {
       waitUntil: 'networkidle',
       timeout: 30000
     });
+    
+    // Wait for products to be loaded
+    await page.waitForSelector('.shelf-container', { 
+      state: 'visible', 
+      timeout: 30000 
+    });
 
     // Sign in first
     const signInButton = page.locator('#Sign\\ In');

@@ -3,14 +3,19 @@ import { test, expect } from '@playwright/test';
 test('Google Filter Functionality Test - TC019', async ({ page }) => {
     console.log('[[PROPERTY|id=TC019]]');
     // Navigate to the product listing page and wait for initial render
-    await page.goto('https://testathon.live/');
+    await page.goto('https://testathon.live/', { 
+        waitUntil: 'networkidle',
+        timeout: 30000 
+    });
     
     // Ensure the page is fully loaded
     await Promise.all([
         page.waitForLoadState('load'),
-        page.waitForLoadState('domcontentloaded'),
-        page.waitForLoadState('networkidle')
+        page.waitForLoadState('domcontentloaded')
     ]);
+    
+    // Wait for content to be interactive
+    await page.waitForSelector('.shelf-container', { state: 'visible', timeout: 30000 });
 
     // Wait for any element that indicates the main content is loaded
     await Promise.race([

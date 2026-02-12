@@ -1,0 +1,46 @@
+name: Daily Plastemart Price Extraction
+
+on:
+  schedule:
+    # Run every day at 9:00 AM UTC
+    - cron: '0 9 * * *'
+  workflow_dispatch: # Allow manual trigger
+
+jobs:
+  extract-prices:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+      
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+      
+      - name: Install dependencies
+        run: npm install
+      
+      - name: Install Playwright browsers
+        run: npx playwright install chromium
+      
+      - name: Run Plastemart price extraction test
+        run: npx playwright test tests/plastemart-excel-download.spec.ts
+      
+      - name: Upload test results
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: plastemart-results
+          path: test-results/
+      
+      - name: Generate test report
+        if: always()
+        run: |
+          echo "## Plastemart Price Extraction Results" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "Test completed on $(date)" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          echo "### Downloads:" >> $GITHUB_STEP_SUMMARY
+          ls -lh downloads/ >> $GITHUB_STEP_SUMMARY || echo "No downloads found"
