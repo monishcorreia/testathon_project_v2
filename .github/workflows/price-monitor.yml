@@ -1,0 +1,67 @@
+name: 🚗 DiscoverCars Price Monitor
+
+on:
+  schedule:
+    # Run daily at 9:00 AM UTC (adjust timezone as needed)
+    # Format: minute hour day month day-of-week
+    - cron: '0 9 * * *'
+  
+  # Allow manual trigger from GitHub Actions tab
+  workflow_dispatch:
+
+jobs:
+  check-price:
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: 📥 Checkout code
+        uses: actions/checkout@v3
+      
+      - name: 🔧 Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          cache: 'npm'
+      
+      - name: 📦 Install dependencies
+        run: npm install playwright nodemailer dotenv
+      
+      - name: 🚗 Check car rental price
+        env:
+          GMAIL_USER: ${{ secrets.GMAIL_USER }}
+          GMAIL_PASSWORD: ${{ secrets.GMAIL_PASSWORD }}
+        run: node price-monitor.js
+      
+      - name: 📊 Upload price log
+        if: always()
+        uses: actions/upload-artifact@v3
+        with:
+          name: price-logs
+          path: |
+            price-monitor.log
+            price-log.json
+          retention-days: 90
+      
+      - name: 📈 Check price log
+        if: always()
+        run: |
+          echo "=== Latest Price Log ==="
+          cat price-log.json || echo "No price log yet"
+          echo ""
+          echo "=== Recent Execution Log ==="
+          tail -20 price-monitor.log || echo "No execution log yet"
+
+  # Optional: Send test notification if configured
+  notify-status:
+    needs: check-price
+    runs-on: ubuntu-latest
+    if: always()
+    
+    steps:
+      - name: 📊 Workflow Status
+        run: |
+          if [ "${{ needs.check-price.result }}" == "success" ]; then
+            echo "✅ Price check completed successfully"
+          else
+            echo "❌ Price check failed - check logs"
+          fi

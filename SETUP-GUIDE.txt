@@ -1,0 +1,146 @@
+#!/bin/bash
+
+# Display Setup Guide
+cat << 'EOF'
+
+╔══════════════════════════════════════════════════════════════════════╗
+║                 🚗 Car Rental Price Monitor Setup 🚗                 ║
+║           Automated Daily Price Alerts for DiscoverCars             ║
+╚══════════════════════════════════════════════════════════════════════╝
+
+📌 QUICK REFERENCE GUIDE
+═══════════════════════════════════════════════════════════════════════
+
+1️⃣  GET GMAIL APP PASSWORD (5 minutes)
+   ├─ Visit: https://myaccount.google.com/security
+   ├─ Enable: 2-Step Verification
+   ├─ Go to: App passwords
+   └─ Copy: 16-character password
+
+2️⃣  CREATE .env FILE (1 minute)
+   ├─ Create file: .env
+   ├─ Content:
+   │   GMAIL_USER=monish.correia@gmail.com
+   │   GMAIL_PASSWORD=your-16-char-password
+   └─ Save in: project root directory
+
+3️⃣  INSTALL DEPENDENCIES (2 minutes)
+   └─ Run: npm install playwright nodemailer dotenv
+
+4️⃣  TEST SETUP
+   ├─ Run: node test-setup.js
+   └─ Look for: ✅ All tests passed
+
+5️⃣  MANUAL TEST
+   ├─ Run: node price-monitor.js
+   └─ Look for: ✅ Price check completed
+
+6️⃣  SCHEDULE DAILY RUNS
+   ├─ macOS:   Follow QUICK-START.md section "macOS"
+   ├─ Linux:   Follow QUICK-START.md section "Linux"
+   └─ Windows: Follow QUICK-START.md section "Windows"
+
+═══════════════════════════════════════════════════════════════════════
+
+📁 FILES CREATED FOR YOU:
+
+Core Files:
+  📄 price-monitor.js              ← Main monitoring script ⭐
+  📄 test-setup.js                 ← Verification tool
+  📄 .env                          ← Your credentials (CREATE THIS!)
+
+Documentation:
+  📘 QUICK-START.md                ← Start here! ⭐
+  📗 PRICE-MONITOR-SETUP.md        ← Detailed setup guide
+  📙 README-PRICE-MONITOR.md       ← Complete reference
+
+Setup Scripts:
+  🔧 setup-price-monitor.sh        ← For macOS/Linux
+  🔧 run-price-monitor.bat         ← For Windows
+
+Auto-Generated (on first run):
+  📊 price-monitor.log             ← Execution logs
+  📈 price-log.json                ← Price history
+
+═══════════════════════════════════════════════════════════════════════
+
+🎯 WHAT YOU'LL GET:
+
+  ✅ Daily automatic price checks at 9:00 AM
+  ✅ Email alerts when price drops below ₹50,000
+  ✅ Price history tracking
+  ✅ Execution logs for monitoring
+  ✅ Automatic scheduling (no manual action needed)
+
+═══════════════════════════════════════════════════════════════════════
+
+📊 CURRENT BOOKING DETAILS:
+
+  Location:        Milan Airport Malpensa (MXP)
+  Pick-up:         May 9, 2026 at 13:00
+  Drop-off:        May 23, 2026 at 13:00
+  Duration:        14 days
+  Car:             Compact (Automatic Transmission)
+  Supplier:        RentalPlus (8.6 rating)
+  Special:         Zero Deductible
+  Amenities:       Air Conditioning, Free Shuttle, Instant Confirmation
+  
+  Current Price:   ₹54,750
+  Alert When:      ₹50,000 or below
+
+═══════════════════════════════════════════════════════════════════════
+
+🚀 START HERE:
+
+  1. Open: QUICK-START.md
+  2. Follow steps in order
+  3. Run: node test-setup.js
+  4. Set up daily scheduling
+  5. Relax! You'll get alerts when price drops
+
+═══════════════════════════════════════════════════════════════════════
+
+💡 COMMON COMMANDS:
+
+  Manual test:      node price-monitor.js
+  Verify setup:     node test-setup.js
+  View logs:        tail -f price-monitor.log
+  Check history:    cat price-log.json
+  
+  macOS checks:     launchctl list | grep discovercars
+  Linux checks:     crontab -l
+
+═══════════════════════════════════════════════════════════════════════
+
+⚠️  IMPORTANT REMINDERS:
+
+  🔐 Keep .env file PRIVATE - never commit to Git
+  🔐 Use 16-character App Password, not your Gmail password
+  📧 Check spam folder for first alert email
+  ⏰ Script runs at 9:00 AM daily (customize if needed)
+  💰 Alert threshold is ₹50,000 (change if desired)
+
+═══════════════════════════════════════════════════════════════════════
+
+✨ NEXT STEPS:
+
+  → Read QUICK-START.md
+  → Create .env file
+  → Run: npm install
+  → Run: node test-setup.js
+  → Set up daily scheduling
+  → Done! You'll get email alerts ✅
+
+═══════════════════════════════════════════════════════════════════════
+
+Questions? Check:
+  • QUICK-START.md - Fast setup guide
+  • PRICE-MONITOR-SETUP.md - Detailed instructions
+  • README-PRICE-MONITOR.md - Complete reference
+  • test-setup.js output - Specific error messages
+
+═══════════════════════════════════════════════════════════════════════
+
+Happy travels! 🚗✈️
+
+EOF

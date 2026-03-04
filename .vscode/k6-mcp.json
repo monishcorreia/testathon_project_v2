@@ -1,0 +1,9 @@
+{
+  "mcpServers": {
+    "mcp-k6": {
+      "command": "mcp-k6",
+      "transport": "stdio",
+      "env": {}
+    }
+  }
+}
